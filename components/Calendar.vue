@@ -1,41 +1,15 @@
 <template>
   <div class="mt-10">
     <table class="border-2 border-[#ccc] mx-auto w-[292px]">
-      <thead class="bg-[#ccc]">
-        <tr>
-          <th class="cursor-pointer select-none" @click="prev">&laquo;</th>
-          <th colspan="5">{{ year }}/{{ stringMonth }}</th>
-          <th class="cursor-pointer select-none" @click="next">&raquo;</th>
-        </tr>
-        <tr>
-          <th>Sun</th>
-          <th>Mon</th>
-          <th>Tue</th>
-          <th>Wed</th>
-          <th>Thr</th>
-          <th>Fri</th>
-          <th>Sat</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="week in weeks" :key="week">
-          <td
-            v-for="date in week"
-            :key="date"
-            class="first:text-red-500 last:text-blue-500"
-            :class="{ disabledDate: date.isDisabled, today: date.isToday }"
-          >
-            {{ date.date }}
-          </td>
-        </tr>
-      </tbody>
-      <tfoot class="bg-[#ccc] font-bold">
-        <tr>
-          <td colspan="7" class="cursor-pointer select-none" @click="backToday">
-            Today
-          </td>
-        </tr>
-      </tfoot>
+      <Thead
+        :year="year"
+        :month="month"
+        :stringMonth="stringMonth"
+        @prev="prev"
+        @next="next"
+      ></Thead>
+      <Tbody :weeks="weeks"></Tbody>
+      <Tfoot @click="backToday"></Tfoot>
     </table>
   </div>
 </template>
@@ -54,6 +28,12 @@
 const today = ref<Date>(new Date());
 const year = ref<number>(today.value.getFullYear());
 const month = ref<number>(today.value.getMonth());
+
+const months = ref<number[]>([]);
+for (let i = 1; i <= 12; i++) {
+  months.value.push(i);
+}
+console.log(months.value);
 
 const stringMonth = computed(() => {
   return String(month.value + 1).padStart(2, "0");
