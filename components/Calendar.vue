@@ -3,8 +3,8 @@
     <table class="border-2 border-[#ccc] mx-auto w-[292px]">
       <Thead
         :year="year"
-        :month="month"
         :stringMonth="stringMonth"
+        :months="months"
         @prev="prev"
         @next="next"
       ></Thead>
@@ -29,15 +29,13 @@ const today = ref<Date>(new Date());
 const year = ref<number>(today.value.getFullYear());
 const month = ref<number>(today.value.getMonth());
 
-const months = ref<number[]>([]);
+const months = ref<{ mon: number; isThisMonth: boolean }[]>([]);
 for (let i = 1; i <= 12; i++) {
-  months.value.push(i);
+  months.value.push({ mon: i, isThisMonth: false });
 }
-console.log(months.value);
+months.value[month.value].isThisMonth = true;
 
-const stringMonth = computed(() => {
-  return String(month.value + 1).padStart(2, "0");
-});
+const stringMonth = ref<string>(String(month.value + 1).padStart(2, "0"));
 
 // 前月分のカレンダー
 function getCalendarHead() {
@@ -149,7 +147,6 @@ const next = () => {
 const backToday = () => {
   year.value = today.value.getFullYear();
   month.value = today.value.getMonth();
-
   weeks.value = createCalendar();
 };
 </script>

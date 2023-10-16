@@ -8,8 +8,19 @@
           <option selected>{{ year }}</option>
         </select>
         <span class="inline-block px-1">/</span>
-        <select name="month" class="w-1/5 text-left bg-[#ccc] appearance-none">
-          <option>{{ month + 1 }}</option>
+        <select
+          name="month"
+          class="w-1/5 text-left bg-[#ccc] appearance-none"
+          :value="modelValue"
+          @input="$emit('update:modelValue', $event.target.value)"
+        >
+          <option
+            v-for="month in months"
+            :key="month"
+            :selected="month.isThisMonth"
+          >
+            {{ month.mon }}
+          </option>
         </select>
       </th>
       <th class="cursor-pointer select-none" @click="next">&raquo;</th>
@@ -26,9 +37,13 @@
   </thead>
 </template>
 
+<style>
+/* aaa */
+</style>
+
 <script setup lang="ts">
-const props = defineProps(["year", "stringMonth", "month"]);
-const emits = defineEmits(["prev", "next"]);
+const props = defineProps(["year", "stringMonth", "months", "modelValue"]);
+const emits = defineEmits(["prev", "next", "update:modelValue"]);
 const prev = () => {
   emits("prev");
 };
